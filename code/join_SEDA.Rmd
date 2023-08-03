@@ -1,0 +1,126 @@
+data1: zipcode, date, max_temperature (yearly)
+data2: schoold id, zipcode (yearly) 
+
+
+Overview of SEDA Data 
+```{r}
+# Set the file path
+file_path <- "../data/input/seda/seda_crosswalk_4.1.csv"
+
+seda_data <- read.csv(file_path)
+
+head(seda_data)
+```
+Filter column to only school name, school ID, year, and zipcode 
+
+```{r}
+seda_data_filtered <- seda_data[, c("sedaschname", "ncessch", "sedasch","year", "lzip")]
+head(seda_data_filtered)
+```
+```{r}
+
+# Create a directory for output if it doesn't exist
+output_dir <- "../data/output/seda_by_year/"
+dir.create(output_dir, showWarnings = FALSE)
+
+# Loop through years 2009 to 2019
+for (year_now in 2009:2019) {
+  # Filter data for the current year
+  year_data <- seda_data_filtered %>%
+    filter(year == year_now)
+  
+  # Set the output file path
+  output_file <- paste0(output_dir, year_now, "_seda_zip.RData")
+  
+  # Save the year's DataFrame to .RData format
+  save(year_data, file = output_file)
+  
+  # Print a confirmation message
+  cat("DataFrame for year", year_now, "saved to", output_file, "\n")
+}
+```
+
+```{r}
+# Load the 2019 data
+load("../data/output/seda_by_year/2013_seda_zip.RData")
+
+# Print the loaded DataFrame
+print(year_data)
+
+```
+
+
+Generate tidy version of Max Air temperature 
+```{r}
+library(dplyr)
+library(tidyr)
+
+# Loop through years 2009 to 2018
+for (year in 2009:2018) {
+  # Set the file path for the specific year
+  max_airfile_path <- paste0("../data/input/gridmet_flat/maximum_air_temperature/", year, "_maximum_air_temperature_by_zip.RData")
+  
+  # Load the data for the specific year
+  load(max_airfile_path)
+  
+  # Convert row names (zipcodes) to a new column 'zipcode'
+  max_air_year <- df %>%
+    add_rownames("zipcode")
+  
+  # Pivot the DataFrame into long format
+  max_air_temperature_year <- max_air_year %>%
+    pivot_longer(cols = -zipcode, 
+                 names_to = "date", 
+                 values_to = "max_air_temperature",
+                 names_transform = list(date = as.Date))
+  
+  # Set the output file path
+  output_file <- paste0("../data/output/max_temperature/", year, "_max_air_temperature.RData")
+  
+  # Save the DataFrame to .RData format
+  save(max_air_temperature_year, file = output_file)
+  
+  # Print a confirmation message
+  cat("DataFrame for year", year, "saved to", output_file, "\n")
+}
+
+
+```
+
+Generate tidy version of Minimum Relative Humidity 
+```{r}
+library(dplyr)
+library(tidyr)
+
+# Loop through years 2009 to 2018
+for (year in 2009:2018) {
+  # Set the file path for the specific year
+  min_humidity <- paste0("../data/input/gridmet_flat/minimum_relative_humidity/", year, "_minimum_relative_humidity_by_zip.RData")
+  
+  # Load the data for the specific year
+  load(min_humidity)
+  
+  # Convert row names (zipcodes) to a new column 'zipcode'
+  min_humidity_year <- df %>%
+    add_rownames("zipcode")
+  
+  # Pivot the DataFrame into long format
+  min_relative_humidity_year <- min_humidity_year %>%
+    pivot_longer(cols = -zipcode, 
+                 names_to = "date", 
+                 values_to = "min_relative_humidity",
+                 names_transform = list(date = as.Date))
+  
+  # Set the output file path
+  output_file <- paste0("../data/output/min_humidity/", year, "_min_humidity.RData")
+  
+  # Save the DataFrame to .RData format
+  save(min_relative_humidity_year, file = output_file)
+  
+  # Print a confirmation message
+  cat("DataFrame for year", year, "saved to", output_file, "\n")
+}
+
+
+```
+
