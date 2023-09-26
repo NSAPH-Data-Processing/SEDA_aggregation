@@ -1,4 +1,4 @@
-# SEDA Data Analysis
+# SEDA Data Merge
 
 This repository contains R code for processing and analyzing two datasets: `dataset 1` which includes daily maximum temperature and daily minimum relative humidity records by zipcode, and `dataset 2` which includes school information by zipcode.
 
