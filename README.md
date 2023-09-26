@@ -1,7 +1,14 @@
 # SEDA Data Merge
 
-This repository contains R code for processing and analyzing two datasets: `dataset 1` which includes daily maximum temperature and daily minimum relative humidity records by zipcode, and `dataset 2` which includes school information by zipcode.
+This repository contains R code for processing and analyzing two datasets: `temperature data` which includes daily maximum temperature and daily minimum relative humidity records by zipcode, and `seda data` which includes school information by zipcode.
 
+The codes can be found in FASSE directory: /n/dominici_nsaph_l3/Lab/data_processing/seda_aggregation/
+The data can be found in FASSE directory /n/dominici_nsaph_l3/Lab/data_processing/seda_aggregation/data/
+
+# Source
+SEDA Data:	https://exhibits.stanford.edu/data/catalog/db586ns4974
+Maximum air temperature:	GRIDMET/Google Earth Engine
+Minimum relative humidity:	GRIDMET/Google Earth Engine
 
 ## Requirements
 To run the provided code, you need:
